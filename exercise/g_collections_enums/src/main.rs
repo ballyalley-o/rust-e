@@ -8,9 +8,16 @@
 // - `Hit`, containing the distance from the center (an f64)
 // - `Miss`
 //
+
+enum Shot {
+    Bullseye,
+    Hit(f64),
+    Miss
+}
+
 // You will need to complete 1b as well before you will be able to run this program successfully.
 
-impl Shot {
+    impl Shot {
     // Here is a method for the `Shot` enum you just defined.
     fn points(self) -> i32 {
         // 1b. Implement this method to convert a Shot into points
@@ -18,8 +25,21 @@ impl Shot {
         // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
         // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
         // - return 0 points if `self` is a Miss
+
+        match self {
+            Shot::Bullseye => 5,
+            Shot::Hit(x) => {
+             if x < 3.0 {
+                2
+             } else {
+                1
+             }
+            },
+            Shot::Miss => 0,
+            }
+        }
     }
-}
+
 
 fn main() {
     // Simulate shooting a bunch of arrows and gathering their coordinates on the target.
