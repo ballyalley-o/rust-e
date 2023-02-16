@@ -17,7 +17,7 @@ enum Shot {
 
 // You will need to complete 1b as well before you will be able to run this program successfully.
 
-    impl Shot {
+impl Shot {
     // Here is a method for the `Shot` enum you just defined.
     fn points(self) -> i32 {
         // 1b. Implement this method to convert a Shot into points
@@ -29,7 +29,7 @@ enum Shot {
         match self {
             Shot::Bullseye => 5,
             Shot::Hit(x) => {
-             if x < 3.0 {
+             if x <= 3.0 {
                 2
              } else {
                 1
@@ -46,7 +46,18 @@ fn main() {
     let arrow_coords: Vec<Coord> = get_arrow_coords(5);
     let mut shots: Vec<Shot> = Vec::new();
 
+
     // 2. For each coord in arrow_coords:
+     for coord in arrow_coords {
+        coord.print_description();
+        let shot = match coord.distance_from_center() {
+        x if x < 1.0 => Shot::Bullseye,
+        x if x < 5.0 => Shot::Hit(x),
+        _ => Shot::Miss,
+
+       };
+        shots.push(shot);
+     }
     //
     //   A. Call `coord.print_description()`
     //   B. Append the correct variant of `Shot` to the `shots` vector depending on the value of
@@ -57,10 +68,14 @@ fn main() {
 
 
     let mut total = 0;
+
     // 3. Finally, loop through each shot in shots and add its points to total
 
-    println!("Final point total is: {}", total);
-}
+        for shot in shots {
+            total += shot.points();
+        }
+        println!("Final point total is: {}", total);
+    }
 
 // A coordinate of where an Arrow hit
 #[derive(Debug)]
@@ -74,11 +89,19 @@ impl Coord {
         (self.x.powf(2.0) + self.y.powf(2.0)).sqrt()
     }
     fn print_description(&self) {
-        println!(
-            "coord is {:.1} away, at ({:.1}, {:.1})",
-            self.distance_from_center(),
-            self.x,
-            self.y);
+        if self.distance_from_center() < 1.0 {
+            println!("BULLSEYE!, coord is {:.1} away, at ({:.1}, {:.1})",
+                self.distance_from_center(),
+                self.x,
+                self.y);
+        } else {
+            println!(
+                "coord is {:.1} away, at ({:.1}, {:.1})",
+                self.distance_from_center(),
+                self.x,
+                self.y
+            );
+        }
     }
 
 }
